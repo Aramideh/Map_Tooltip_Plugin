@@ -1,0 +1,114 @@
+_package sw
+
+
+
+_pragma(classify_level=basic, topic=dd, usage={external, subclass})
+_method dd_record_and_collection_mixin.description_for_tooltip_plugin( _optional field_names , separator_string , include_external_name? ,external_name_separator )
+	#---------------------------------------------------
+	## <Req. #> : <Description>
+	## returns a description of self, suitable _for map_tooltip_plugin
+	## fields_names is a vector of field names
+	## seperator defaults to %newline
+	## inclued_external_names? defaults to true
+	## external_name_separator, only applicable iff
+	## include_external_names? is true and it's value defaults to
+	## %space : %space
+	# Customization for Project : MTN
+	#
+	#---------------- Revision History -----------------
+	# (20/10/30 Aramideh) : Created
+	#-------------- End Revision History ---------------
+
+	l_include_external_name? <<  include_external_name?.default( _true )
+	l_external_name_separator_string << external_name_separator.default("".concatenation(%space.as_charvec(),%:.as_charvec(),%space.as_charvec()))
+	l_separator << separator_string.default( %newline )
+	l_field_names << field_names.default ( _self.visible_non_geometry_field_names.default({}) )
+	l_descriptions << rope.new()
+	l_descriptions.add( _self.source_collection.description() )
+	
+	_for a_field _over l_field_names.fast_elements()
+	_loop 
+		# we are not interested in the join and geometry fields
+		_if _self.field(a_field).is_join? _orif _self.field(a_field).is_geometry? 
+		_then _continue 
+		_endif 
+		
+		_if (l_value << _self.perform( a_field ) ) _isnt _unset 
+		_then
+			_if l_include_external_name?
+			_then
+				l_descriptions.add_last( "".concatenation( _self.field(a_field).external_name,l_external_name_separator_string ,l_value.write_string ))
+			_else
+				l_descriptions.add_last( l_value.as_charvec() )
+			_endif
+		
+		_endif 
+	_endloop
+	
+	_return write_string_with_separator(l_descriptions,l_separator)
+	
+_endmethod
+$
+
+
+
+
+
+_pragma(classify_level=restricted, topic={drafting}, usage={redefinable})
+_method map_tooltip_plugin.description( a_geom )
+	## 
+	## Returns a string to be displayed in the tooltip for the
+	## geometry A_GEOM.
+	##
+	## This method can be redefined to customise the tooltip text.
+	
+	an_rwo << a_geom.rwo
+	
+	_if an_rwo _isnt _unset
+	_then
+		an_ace << .current_doc.map.ace
+		source_collection << an_rwo.source_collection
+
+
+		
+		# START CHANGE
+		# (20/10/30 Aramideh) : 
+
+		#field_names << an_ace.table_visible_field_names( source_collection.dataset_name,
+		#						 source_collection.name,
+		#						 :description )
+		
+		field_names << an_ace.table_visible_field_names( source_collection.dataset_name,
+								 source_collection.name,
+								 :description )
+
+		#  _unset indicates that there has been no configuraton in the ACE for this table/dataset/tag.
+		_if field_names _is _unset
+		_then
+			_try
+				field_names << an_ace.table_visible_field_names_with_defaults( source_collection.dataset_name,
+											       source_collection,
+											       :default )
+				
+			_when  ace_dataset_not_open , ace_collection_not_found
+				# will never be executed anyway
+				field_names << source_collection.visible_field_names
+			_endtry
+			
+		_endif
+
+		#_return an_rwo.description( field_names )
+		_return an_rwo.description_for_tooltip_plugin ( field_names )
+		
+		#
+		# END CHANGE
+		
+		
+
+		
+	_else
+		_return a_geom.description()
+	_endif
+	
+_endmethod
+$
