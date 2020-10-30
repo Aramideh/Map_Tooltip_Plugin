@@ -2,8 +2,8 @@ _package sw
 
 
 
-_pragma(classify_level=basic, topic=dd, usage={external, subclass})
-_method dd_record_and_collection_mixin.description_for_tooltip_plugin( _optional field_names , separator_string , include_external_name? ,external_name_separator )
+_pragma(classify_level=basic, topic=rwo_record, usage={external, subclass})
+_method rwo_record.description_for_tooltip_plugin( _optional field_names , separator_string , include_external_name? ,external_name_separator )
 	#---------------------------------------------------
 	## <Req. #> : <Description>
 	## returns a description of self, suitable _for map_tooltip_plugin
