@@ -16,7 +16,7 @@ _method rwo_record.description_for_tooltip_plugin( _optional field_names , prope
 	# Customization for Project : MTN
 	#
 	#---------------- Revision History -----------------
-	# (20/10/30 Aramideh) : Created
+	# (20/10/30 Sadeq Aramideh) : Created
 	#-------------- End Revision History ---------------
 
 	l_include_external_name? <<  include_external_name?.default( _true )
@@ -71,7 +71,7 @@ _method map_tooltip_plugin.description( a_geom )
 
 		
 		# START CHANGE
-		# (20/10/30 Aramideh) : 
+		# (20/10/30 Sadeq Aramideh) : 
 
 		#field_names << an_ace.table_visible_field_names( source_collection.dataset_name,
 		#						 source_collection.name,
