@@ -102,7 +102,7 @@ _method pni_map_tooltip_plugin.description( a_geom )
 
 		
 		# START CHANGE
-		# (20/10/30 Aramideh) : 
+		# (20/10/30 Sadeq Aramideh) : 
 
 		#field_names << an_ace.table_visible_field_names( source_collection.dataset_name,
 		#						 source_collection.name,
