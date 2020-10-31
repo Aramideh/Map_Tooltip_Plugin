@@ -3,12 +3,12 @@ _package sw
 
 
 _pragma(classify_level=basic, topic=rwo_record, usage={external, subclass})
-_method rwo_record.description_for_tooltip_plugin( _optional field_names , line_separator_string , include_external_name? ,prop_value_separator )
+_method rwo_record.description_for_tooltip_plugin( _optional field_names , property_separator_string , include_external_name? ,prop_value_separator )
 	#---------------------------------------------------
 	## <Req. #> : <Description>
 	## returns a description of self, suitable for map_tooltip_plugin
 	## fields_names is a vector of field names
-	## line_separator_string defaults to %newline
+	## property_separator_string defaults to %newline
 	## inclued_external_names? defaults to true
 	## prop_value_separator, only applicable if
 	## include_external_names? is true and it's value defaults to
@@ -20,8 +20,8 @@ _method rwo_record.description_for_tooltip_plugin( _optional field_names , line_
 	#-------------- End Revision History ---------------
 
 	l_include_external_name? <<  include_external_name?.default( _true )
-	l_prop_value_line_separator_string << prop_value_separator.default("".concatenation(%space.as_charvec(),%:.as_charvec(),%space.as_charvec()))
-	l_separator << line_separator_string.default( %newline )
+	l_prop_value_property_separator_string << prop_value_separator.default("".concatenation(%space.as_charvec(),%:.as_charvec(),%space.as_charvec()))
+	l_separator << property_separator_string.default( %newline )
 	l_field_names << field_names.default ( _self.visible_non_geometry_field_names.default({}) )
 	l_descriptions << rope.new()
 	l_descriptions.add( _self.source_collection.description() )
@@ -37,9 +37,9 @@ _method rwo_record.description_for_tooltip_plugin( _optional field_names , line_
 		_then
 			_if l_include_external_name?
 			_then
-				l_descriptions.add_last( "".concatenation( _self.field(a_field).external_name,l_prop_value_line_separator_string ,l_value.write_string ))
+				l_descriptions.add_last( "".concatenation( _self.field(a_field).external_name,l_prop_value_property_separator_string ,l_value.write_string ))
 			_else
-				l_descriptions.add_last( l_value.as_charvec() )
+				l_descriptions.add_last( l_value.write_string )
 			_endif
 		
 		_endif 
@@ -128,6 +128,7 @@ _method pni_map_tooltip_plugin.description( a_geom )
 		_endif
 
 		#_return an_rwo.description( field_names )
+		#_return an_rwo.description_for_tooltip_plugin ( field_names , _unset , _false  ) # without filed external name
 		_return an_rwo.description_for_tooltip_plugin ( field_names )
 		
 		#
