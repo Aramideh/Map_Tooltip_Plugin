@@ -91,7 +91,7 @@ _method map_tooltip_plugin.description( a_geom )
 				
 			_when  ace_dataset_not_open , ace_collection_not_found
 				# will never be executed anyway
-				field_names << source_collection.visible_field_names
+				#field_names << source_collection.visible_field_names
 			_endtry
 			
 		_endif
